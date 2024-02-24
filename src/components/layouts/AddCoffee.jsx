@@ -1,7 +1,7 @@
 // import React from 'react';
-
+import Swal from 'sweetalert2'
 const AddCoffee = () => {
-    const handleCoffeAdd =e=>{
+    const handleCoffeAdd = e => {
         e.preventDefault();
         const form = e.target;
         const name = form.name.value;
@@ -12,8 +12,28 @@ const AddCoffee = () => {
         const details = form.details.value;
         const photo = form.photo.value;
 
-        const newCoffee = {name,chef,supplier,category,taste,details,photo};
+        const newCoffee = { name, chef, supplier, category, taste, details, photo };
         console.log(newCoffee);
+
+        fetch('http://localhost:5000/coffee', {
+            method:'POST',
+            headers:{
+                'content-type':'application/json'
+            },
+            body:JSON.stringify(newCoffee)
+        })
+            .then(res => res.json())
+            .then(data =>{
+                console.log(data);
+                if(data.insertedId){
+                    Swal.fire({
+                        title: 'Success!',
+                        text: 'New Coffee Added Successfully! ',
+                        icon: 'success',
+                        confirmButtonText: 'Cool'
+                      })
+                }
+            })
     }
     return (
         <div className=" p-24">
@@ -25,7 +45,7 @@ const AddCoffee = () => {
                         <label className="label">
                             <span className="label-text">Coffee Name</span>
                         </label>
-                        <input type="text" placeholder="text" name="name" className="input input-bordered gap-1 w-full" required />
+                        <input type="text" placeholder="text" name="name" className="input input-bordered  w-full" required />
                     </div>
                     <div className="form-control md:w-1/2">
                         <label className="label">
